@@ -1,0 +1,114 @@
+---
+description: Convert article to all platform formats + generate images
+---
+
+You are converting a finished Chinese article into all publishing formats.
+
+# What this command produces
+
+```
+articles/[name]/
+├── weixin.html        ← WeChat HTML (script-generated)
+├── zhihu.md           ← Zhihu article (script-generated)
+├── xhs.md             ← Xiaohongshu note (LLM-generated)
+├── english.md         ← English translation (LLM-generated)
+└── images/
+    ├── cover-xhs.jpg     3:4  portrait  (Imagen 4)
+    ├── cover-weixin.jpg  16:9 landscape (Imagen 4)
+    ├── section-1.jpg     1:1  square    (Imagen 4)
+    ├── section-2.jpg     1:1  square    (Imagen 4)
+    ├── section-3.jpg     1:1  square    (Imagen 4)
+    └── manifest.json
+```
+
+# Instructions
+
+## Step 1 — Locate the article
+
+Detect article directory from current working directory or ask the user.
+Detect persona — try in this order:
+1. Walk up the directory tree looking for a `.persona` file; read its first line
+2. If the current path contains a directory name matching one in `personas/` → use that persona
+3. Ask the user
+
+Verify `draft.md` (or `final.md`) exists. Read it fully — you'll need it for the LLM steps.
+
+## Step 2 — Run all scripts
+
+**IMPORTANT: Images must be generated BEFORE WeChat HTML**, because the weixin converter embeds section images inline in the HTML.
+
+### 2a — Images (run first)
+```bash
+python scripts/writing/image_generator.py <article_dir> --persona <persona>
+```
+Generates 5 images into `<article_dir>/images/`. Must complete before 2b.
+
+### 2b — WeChat HTML (after images are ready)
+```bash
+python scripts/writing/article_converter.py weixin <article_dir>
+```
+Extracts links → reference list, runs html_converter, injects section images as base64 into the HTML, writes `weixin.html`.
+
+**WeChat HTML behaviour:**
+- Title is extracted from h1 and **not included** in the styled body (user pastes it into WeChat title field separately)
+- Section images (`section-1.jpg`, `section-2.jpg`, etc.) are embedded inline before h2 headings
+- Cover image (`cover-weixin.jpg`) is uploaded separately as the WeChat cover
+
+### 2c — Zhihu markdown (can run in parallel with 2a)
+```bash
+python scripts/writing/article_converter.py zhihu <article_dir>
+```
+Cleans markdown, adds footer, writes `zhihu.md`.
+
+Run 2a first, then 2b. 2c can run in parallel with 2a. Report any errors before continuing.
+
+## Step 3 — XHS adaptation (LLM)
+
+Read `writing/templates/platform-adapters/xhs-adapter.md` for full rules.
+
+Adapt the article for XHS (小红书):
+- **Short format** (≤600 chars): Title ≤20 chars, body 300-600 chars, 3-5 punchy paragraphs
+- **Long format** (600+ chars): Full article format allowed, with hashtags at end
+- **Both formats**: No inline links, no headings, no emoji, first-person "分享" energy
+- **Hashtags**: 5-8 tags at end (2-3 topic, 2-3 niche, 1-2 emotion/behaviour)
+
+Choose the format that best fits the content. XHS supports both short and long articles.
+
+Write to `<article_dir>/xhs.md`.
+
+## Step 4 — English translation (LLM)
+
+Follow all rules in `.claude/commands/english.md`.
+
+Key rules:
+- Aggressive cutting — English version noticeably shorter
+- Replace WeChat links with English sources
+- Adapt Chinese-specific examples for international readers
+- Proper frontmatter (title, date, author, category, description)
+- End with: `---\n\n*Originally written in Chinese. Translated by the author.*`
+
+Write to `<article_dir>/english.md`.
+
+## Step 5 — Report
+
+```
+✓ Conversion complete: [article title]
+
+Scripts ran:
+  weixin.html    — WeChat HTML, [N] links moved to references
+  zhihu.md       — [N] chars
+  images/        — [N] images generated (cover-xhs 3:4, cover-weixin 16:9, section-N 1:1)
+
+LLM outputs:
+  xhs.md         — [N] chars, [N] hashtags
+  english.md     — [N] words, [N] WeChat links replaced
+
+Run /publish to distribute.
+```
+
+# Important
+
+- Scripts must run successfully before LLM steps — if a script fails, diagnose and fix
+- NEVER fabricate data in any adapted version
+- `english.md` goes to the article directory, not `posts/`
+- If `images/` generation fails on some images, note it but continue — partial image sets are fine
