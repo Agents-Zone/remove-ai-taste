@@ -1,0 +1,2 @@
+# Handoff files are genuine workflow state, but private — never committed.
+.data/

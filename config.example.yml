@@ -1,0 +1,16 @@
+# remove-ai-taste App-in-Skill — public config template (committed).
+# Copy to config.local.yml and fill real values; config.local.yml is gitignored.
+# Secrets (if a cloud provider is used) belong in environment variables, never here.
+
+# Which data provider backs the handoff. Default: local files.
+#   local | postgres | notion | busabase
+data_provider: local
+
+# Source of truth for writing rules (the skill reads this at generation time).
+guide_path: ~/.claude/skills/remove-ai-taste/references/writing-core.md
+
+# Default language assumption when the batch does not specify one.
+default_lang: zh
+
+# Severity that blocks "done": blocking | should_fix | polish
+blocking_threshold: blocking

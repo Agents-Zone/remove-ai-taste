@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>写作审阅 · review-writing</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1>写作审阅</h1>
+      <span id="target" class="target"></span>
+    </div>
+    <div class="header-right">
+      <span id="lock-banner" class="lock-banner hidden">🔒 skill 正在执行，只读</span>
+      <div id="counts" class="counts"></div>
+    </div>
+  </header>
+
+  <nav id="stages" class="stages"></nav>
+
+  <main id="findings" class="findings">
+    <p class="empty">加载中…</p>
+  </main>
+
+  <footer>
+    <span id="status-line">本地审阅队列 · 127.0.0.1 · app 不接触原文，只有 skill 写草稿</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

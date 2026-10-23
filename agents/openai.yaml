@@ -1,0 +1,4 @@
+interface:
+  display_name: "Remove AI Taste"
+  short_description: "Revise prose to remove AI writing fingerprints"
+  default_prompt: "Use $remove-ai-taste to revise this draft so it reads less AI-generated while preserving facts and voice."
