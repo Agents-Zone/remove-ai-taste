@@ -9,7 +9,7 @@ model: inherit
 
 审阅或改写任何文字，去除 AI 味、术语不严谨、逻辑缺口和风格问题。文章、报告、PPT 文案、课件、合同、邮件、评审意见都用这一个 skill，文体差异由附录处理。
 
-三层规则的关系：`references/rules.md` 是七条总则，只管 AI 腔，建议抄进你的 `CLAUDE.md` / `AGENTS.md` 让每次会话常驻；本 skill 的 `references/writing-core.md` 是它的展开，任何文体通用；哪类话要来源、哪类话可以直说、结尾能不能带口号，是文体口径，放在产出该文体的工作区里，Step 0 按文体路由过去。
+三层规则的关系：`references/rules.md` 是九条总则（七条管 AI 腔，两条管读者），建议抄进你的 `CLAUDE.md` / `AGENTS.md` 让每次会话常驻；本 skill 的 `references/writing-core.md` 是它的展开，任何文体通用；哪类话要来源、哪类话可以直说、结尾能不能带口号，是文体口径，放在产出该文体的工作区里，Step 0 按文体路由过去。
 
 ## Modes
 
@@ -71,7 +71,7 @@ python3 ~/.claude/skills/remove-ai-taste/scripts/verify_preservation.py original
 
 ## References (load when needed)
 
-- `references/rules.md` — 七条总则，writing-core.md 是它的展开。
+- `references/rules.md` — 九条总则。前七条管 AI 腔，writing-core.md 是它们的展开；第 8、9 条管读者，Step 2 第 5 项按它们查。
 - `references/writing-core.md` — 通用核心，Step 0 必读。
 - `references/genre-review.md` — 评审意见文体附录。其他文体的口径规则见 Step 0 的路由表，不在本目录。
 - `references/voice-calibration.md` — 用户提供或明确批准声音样本时才读；学表达习惯，不搬事实与个人细节。
@@ -117,8 +117,9 @@ Apply every section of `references/writing-core.md` and the matching genre rules
 2. **术语严谨性（BLOCKING）** — Section 8: undefined terms, consistency, circular definitions
 3. **事实与口径** — 按 Step 0 读到的文体口径核对：具名客户、具名人物的数字和引语有没有来源；该文体允许直说的判断、口号、行动召唤不当问题报
 4. **信息密度** — Section 10: every sentence must add information
-5. **结构与流** — Check: is the takeaway clear? Does each section start from a problem the reader can relate to? Do sections build on each other or just sit side by side?
-6. **语言风格** — Section 12: natural paragraphs, punctuation, spacing, zero emoji
+5. **读者（rules.md 第 8、9 条）** — Who is the reader and what decision do they make? Flag sentences that speak to no reader (describing a chart, explaining theory, reporting what the author did) and details tied to decisions this reader does not make (e.g. schedules, payment milestones, internal task split in a deck for decision makers).
+6. **结构与流** — Check: is the takeaway clear? Does each section start from a problem the reader can relate to? Do sections build on each other or just sit side by side?
+7. **语言风格** — Section 12: natural paragraphs, punctuation, spacing, zero emoji
 
 ### Judgment thresholds (from Section 7 of the guide)
 
@@ -151,6 +152,10 @@ Apply every section of `references/writing-core.md` and the matching genre rules
 ### 信息密度
 
 [多余的句子、低密度段落、不成立的比喻]
+
+### 读者问题
+
+[没有对读者说话的句子、读者用不上的细节]
 
 ### 结构问题
 

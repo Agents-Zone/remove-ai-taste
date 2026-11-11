@@ -1,8 +1,10 @@
 # remove-ai-taste
 
+[English](README.en.md)
+
 审阅或改写中英文文字，去掉 AI 腔。数字、日期、专名、引文、URL 原样保留，作者的观点和声音不动。
 
-它以 Claude Code skill 的形式运行，由一个 skill、一个扫描器、一个本地审阅界面和两个校验脚本组成。一篇长文从诊断到落盘走下面这条流程：
+它以 Claude Code / Codex skill 的形式运行，由一个 skill、一个扫描器、一个本地审阅界面和两个校验脚本组成。一篇长文从诊断到落盘走下面这条流程：
 
 1. **扫描**。`scripts/scan_ai_taste.py` 按文体档位初筛，跳过代码块、链接、引文，同类问题成簇出现才报。
 2. **诊断**。Claude 按 `references/writing-core.md` 的判定标准复核扫描结果，补上扫描器抓不到的逻辑和结构问题，每条给出原文和改写。
@@ -13,11 +15,23 @@
 
 条目少，或者没有显示器，就跳过第 3 到第 5 步，Claude 直接在对话里给审阅报告或改好的全文。
 
+![审阅界面：每条给出原文、改写建议和理由，作者批准、自己改、打回或保留原文](docs/review-ui.png)
+
 ## 安装
+
+Claude Code：
 
 ```bash
 git clone https://github.com/Agents-Zone/remove-ai-taste.git ~/.claude/skills/remove-ai-taste
 ```
+
+Codex（同一份目录，`agents/openai.yaml` 提供界面名称和默认提示）：
+
+```bash
+git clone https://github.com/Agents-Zone/remove-ai-taste.git ~/.codex/skills/remove-ai-taste
+```
+
+两边都用的话，clone 一份，另一边建软链接。
 
 需要 Python 3 和 Node，都只用标准库，不用装依赖。
 
@@ -41,6 +55,10 @@ python3 -m unittest discover -s tests -q
 
 ## 规则
 
-`references/rules.md` 是七条总则，`references/writing-core.md` 逐条展开，英文稿另看 `references/anti-ai-fingerprints.md`。文体口径（哪类话要来源、结尾能不能带口号）留给各项目自己的 `AGENTS.md` 或风格指南，skill 会去读。评审意见这一文体的口径在 `references/genre-review.md`。
+`references/rules.md` 是九条总则。前七条管 AI 腔，`references/writing-core.md` 逐条展开，英文稿另看 `references/anti-ai-fingerprints.md`。第 8、9 条管读者：先定读者和他要做的决定，读者用不上的细节不写。审阅时这两条单独成一项。文体口径（哪类话要来源、结尾能不能带口号）留给各项目自己的 `AGENTS.md` 或风格指南，skill 会去读。评审意见这一文体的口径在 `references/genre-review.md`。
 
 界面和交接文件的设计见 `APP-IN-SKILL-DESIGN.md`。
+
+## 许可
+
+MIT
