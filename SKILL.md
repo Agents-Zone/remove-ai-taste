@@ -20,6 +20,8 @@ This skill has two modes. Default to **review** unless the user asks to rewrite/
 
 判断模式：用户说"审一下/检查/review/有没有 AI 味" → review；说"改写/润色/去 AI 味/humanize/帮我改" → rewrite。不确定就问。
 
+多 agent 版本：`workflows/remove-ai-taste.js` 把同样的流程拆给多个 agent 跑（四个方向并行诊断、怀疑者逐行驳回、改写后独立核对事实）。用户明确要求用 workflow 时才跑，它比单个 skill 贵一个数量级；参数和用法见 README。
+
 ## Companion UI (App-in-Skill, optional)
 
 审一篇长文会产出几十条 finding。聊天里只能往下滚；条目多、或要把"挑哪些改写"交给作者本人时，可以开一个本地审阅界面。设计与契约见 `APP-IN-SKILL-DESIGN.md`。
